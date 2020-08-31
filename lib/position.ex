@@ -1,7 +1,8 @@
 defmodule Position do
-  defstruct x: nil, y: nil, direction: nil
+  defstruct [:coordinate, :direction]
 
-  defp new(one, direction) do %__MODULE__{one | direction: direction} end
+  defp new(one, direction) do
+    %__MODULE__{one | direction: direction} end
 
   defp turn(position, "R") do
     case position.direction do
@@ -28,12 +29,30 @@ defmodule Position do
   end
 
   defp move(position, unit) do
+    times = Enum.to_list(0..unit-1)
     case position.direction do
-      "N" -> %__MODULE__{position | y: position.y + unit}
-      "S" -> %__MODULE__{position | y: position.y - unit}
-      "E" -> %__MODULE__{position | x: position.x + unit}
-      "W" -> %__MODULE__{position | x: position.x - unit}
-      _  -> position
+      "N" ->
+        %__MODULE__{
+          position |
+          coordinate: Enum.reduce(times, position.coordinate, fn (n, c) -> Coordinate.moveNorth(c) end)
+        }
+      "S" ->
+        %__MODULE__{
+          position |
+          coordinate: Enum.reduce(times, position.coordinate, fn (n, c) -> Coordinate.moveSouth(c) end)
+        }
+      "E" ->
+        %__MODULE__{
+          position |
+          coordinate: Enum.reduce(times, position.coordinate, fn (n, c) -> Coordinate.moveEast(c) end)
+        }
+      "W" ->
+        %__MODULE__{
+          position |
+          coordinate: Enum.reduce(times, position.coordinate, fn (n, c) -> Coordinate.moveWest(c) end)
+        }
+      _ ->
+        position
     end
   end
 
