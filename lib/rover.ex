@@ -1,6 +1,6 @@
 defmodule Rover do
 
-  defstruct position: Position
+  defstruct [:id, position: Position]
 
   def update(rover, commands \\ []) do
     Enum.reduce commands, rover, fn (c, r) ->

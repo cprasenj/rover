@@ -3,15 +3,18 @@ defmodule Plateau do
 #  @behaviour Access
 #  def fetch(term, key), do: Map.fetch(term, key)
 
-  @default_size {10, 10}
-  defstruct size: @default_size, rovers: %{}
-
-end
-
-#defImpl operations,  for: Plateau do
+#  @default_size {10, 10}
+#  defstruct size: @default_size, rovers: []
 #
-#  def deploy_rover(_plateau, x, y) do
+#  def command_rover(rover_id, commands) do
 #
 #  end
 #
-#end
+#  def addRover(rover) do
+##    if rover.position
+#
+#  end
+
+
+end
+
