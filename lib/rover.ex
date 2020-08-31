@@ -1,17 +1,13 @@
 defmodule Rover do
 
-  defstruct position: Position,
-            commands_remaining: [],
-            commands_executed: [],
-            error: nil
+  defstruct position: Position
 
-  def new(position, commands \\ []) do
-    %{position: position, commands_remaining: commands}
+  def update(rover, commands \\ []) do
+    Enum.reduce commands, rover, fn (c, r) ->
+      %Rover{
+        position: Position.apply_command(r.position, c)
+      }
+    end
   end
-
-  def new(x, y, direction, commands \\ []) do
-    new(%Position{x: x, y: y, direction: direction}, commands)
-  end
-
 end
 

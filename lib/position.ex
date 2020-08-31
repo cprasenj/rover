@@ -23,6 +23,10 @@ defmodule Position do
     end
   end
 
+  defp turn(position, _) do
+    position
+  end
+
   defp move(position, unit) do
     case position.direction do
       "N" -> %__MODULE__{position | y: position.y + unit}
