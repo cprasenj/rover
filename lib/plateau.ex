@@ -13,17 +13,18 @@ defmodule Plateau do
 
   end
 
-  def addRover(plateau, rover, updatedRover) do
+  def addRover(plateau, rover) do
     cond do
-      isInPlateau(plateau, updatedRover) && isPositionEmpty(plateau, rover.position.coordinate)->
-        replaceRover(plateau, rover, updatedRover)
+      isInPlateau(plateau, rover) && isPositionEmpty(plateau, rover) ->
+        %Plateau{plateau | rovers: [rover | plateau.rovers]}
       :else -> raise "Position already occupied"
     end
 
   end
 
-  defp isPositionEmpty(plateau, coordinate) do
-    Enum.find(plateau.rovers, fn r -> r.position.coordinate != coordinate  end) != nil
+  defp isPositionEmpty(plateau, rover) do
+    coordinate = rover.position.coordinate
+    Enum.find(plateau.rovers, fn r -> r.position.coordinate == coordinate  end) == nil
   end
 
   defp replaceRover(plateau, rover, newRover) do
@@ -34,6 +35,7 @@ defmodule Plateau do
   defp isInPlateau(plateau, rover) do
     coordinate = rover.position.coordinate
     coordinate.x <= plateau.x && coordinate.y <= plateau.y
+    && coordinate.x >= 0 && coordinate.y >= 0
   end
 
 end
