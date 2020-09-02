@@ -34,22 +34,22 @@ defmodule Position do
       "N" ->
         %__MODULE__{
           position |
-          coordinate: Enum.reduce(times, position.coordinate, fn (n, c) -> Coordinate.moveNorth(c) end)
+          coordinate: Enum.reduce(times, position.coordinate, fn (_, c) -> Coordinate.moveNorth(c) end)
         }
       "S" ->
         %__MODULE__{
           position |
-          coordinate: Enum.reduce(times, position.coordinate, fn (n, c) -> Coordinate.moveSouth(c) end)
+          coordinate: Enum.reduce(times, position.coordinate, fn (_, c) -> Coordinate.moveSouth(c) end)
         }
       "E" ->
         %__MODULE__{
           position |
-          coordinate: Enum.reduce(times, position.coordinate, fn (n, c) -> Coordinate.moveEast(c) end)
+          coordinate: Enum.reduce(times, position.coordinate, fn (_, c) -> Coordinate.moveEast(c) end)
         }
       "W" ->
         %__MODULE__{
           position |
-          coordinate: Enum.reduce(times, position.coordinate, fn (n, c) -> Coordinate.moveWest(c) end)
+          coordinate: Enum.reduce(times, position.coordinate, fn (_, c) -> Coordinate.moveWest(c) end)
         }
       _ ->
         position
