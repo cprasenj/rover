@@ -2,9 +2,9 @@ defmodule Plateau do
 
   defstruct x: nil, y: nil, rovers: []
 
-  defp verifyRover(rover, plateau) do
+  defp verifyRover(plateau, rover) do
     cond do
-      isPositionEmpty(%Plateau{plateau | rovers: plateau.rovers }, rover.position.coordinate) -> rover
+      isPositionEmpty(%Plateau{plateau | rovers: plateau.rovers}, rover.position.coordinate) -> rover
       :else -> raise "collision"
     end
   end
@@ -15,21 +15,23 @@ defmodule Plateau do
       commands,
       roverToBeCommand,
       fn (c, r) ->
-        Rover.update(
-          r,
-          [
-            case c do
-              "M" -> 1
-              _ -> c
-            end
-          ]
-        )
-        |> fn (p, r) -> verifyRover(p, r) end.(plateau)
+        r
+        |> fn (r, c) -> Rover.update(r, [c])
+           end.(
+               case c do
+                 "M" -> 1
+                 _ -> c
+               end
+               )
+        |> fn (r, p) ->
+          cond do
+            c == "M" -> verifyRover(p, r)
+            :else -> r
+          end
+           end.(plateau)
       end
     )
-
     cond do
-      !isPositionEmpty(plateau, updatedRover.position.coordinate) -> raise "collision"
       isInPlateau(plateau, updatedRover) ->
         replaceRover(plateau, roverToBeCommand, updatedRover)
       :else -> raise "Rover out of plateau"

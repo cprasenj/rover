@@ -2,7 +2,7 @@ defmodule PlateauTest do
   use ExUnit.Case
   doctest Plateau
 
-  test "should add rover in plateau" do
+  test "should add rover in empty plateau" do
     plateau = %Plateau{x: 5, y: 5, rovers: []}
 
     assert Plateau.addRover(
@@ -35,6 +35,64 @@ defmodule PlateauTest do
            }
 
   end
+
+  test "should add rover plateau with existing rovers" do
+    plateau = %Plateau{
+      x: 5,
+      y: 5,
+      rovers: [%Rover{
+        id: "1",
+        position: %Position{
+          coordinate: %Coordinate{
+            x: 0,
+            y: 0
+          },
+          direction: "N"
+        }
+      }]
+    }
+
+    assert Plateau.addRover(
+             plateau,
+             %Rover{
+               id: "2",
+               position: %Position{
+                 coordinate: %Coordinate{
+                   x: 1,
+                   y: 0
+                 },
+                 direction: "N"
+               }
+             }
+           ) == %Plateau{
+             x: 5,
+             y: 5,
+             rovers: [
+               %Rover{
+                 id: "2",
+                 position: %Position{
+                   coordinate: %Coordinate{
+                     x: 1,
+                     y: 0
+                   },
+                   direction: "N"
+                 }
+               },
+               %Rover{
+                 id: "1",
+                 position: %Position{
+                   coordinate: %Coordinate{
+                     x: 0,
+                     y: 0
+                   },
+                   direction: "N"
+                 }
+               }
+             ]
+           }
+
+  end
+
 
   test "should not add rover in plateau" do
     plateau = %Plateau{
@@ -73,42 +131,38 @@ defmodule PlateauTest do
 
   test "should command a rover in plateau" do
     plateau = %Plateau{x: 5, y: 5, rovers: []}
-    newPlateau = Plateau.addRover(plateau, %Rover{
-      id: "1",
-      position: %Position{
-        coordinate: %Coordinate{
-          x: 0,
-          y: 0
-        },
-        direction: "N"
+    newPlateau = Plateau.addRover(
+      plateau,
+      %Rover{
+        id: "1",
+        position: %Position{
+          coordinate: %Coordinate{
+            x: 0,
+            y: 0
+          },
+          direction: "N"
+        }
       }
-    })
+    )
 
-    anotherPlateau = Plateau.addRover(plateau, %Rover{
-      id: "2",
-      position: %Position{
-        coordinate: %Coordinate{
-          x: 1,
-          y: 0
-        },
-        direction: "E"
+    anotherPlateau = Plateau.addRover(
+      newPlateau,
+      %Rover{
+        id: "2",
+        position: %Position{
+          coordinate: %Coordinate{
+            x: 1,
+            y: 0
+          },
+          direction: "E"
+        }
       }
-    })
+    )
 
     assert Plateau.command_rover(anotherPlateau, "2", ["L", "M", "M"]) == %Plateau {
              x: 5,
              y: 5,
              rovers: [
-               %Rover{
-                 id: "1",
-                 position: %Position{
-                   coordinate: %Coordinate{
-                     x: 0,
-                     y: 0
-                   },
-                   direction: "N"
-                 }
-               },
                %Rover{
                  id: "2",
                  position: %Position{
@@ -118,9 +172,19 @@ defmodule PlateauTest do
                    },
                    direction: "N"
                  }
+               },
+               %Rover{
+                 id: "1",
+                 position: %Position{
+                   coordinate: %Coordinate{
+                     x: 0,
+                     y: 0
+                   },
+                   direction: "N"
+                 }
                }
+
              ]
            }
-
   end
 end
