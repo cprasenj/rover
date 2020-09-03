@@ -70,4 +70,57 @@ defmodule PlateauTest do
                        )
                  end
   end
+
+  test "should command a rover in plateau" do
+    plateau = %Plateau{x: 5, y: 5, rovers: []}
+    newPlateau = Plateau.addRover(plateau, %Rover{
+      id: "1",
+      position: %Position{
+        coordinate: %Coordinate{
+          x: 0,
+          y: 0
+        },
+        direction: "N"
+      }
+    })
+
+    anotherPlateau = Plateau.addRover(plateau, %Rover{
+      id: "2",
+      position: %Position{
+        coordinate: %Coordinate{
+          x: 1,
+          y: 0
+        },
+        direction: "E"
+      }
+    })
+
+    assert Plateau.command_rover(anotherPlateau, "2", ["L", "M", "M"]) == %Plateau {
+             x: 5,
+             y: 5,
+             rovers: [
+               %Rover{
+                 id: "1",
+                 position: %Position{
+                   coordinate: %Coordinate{
+                     x: 0,
+                     y: 0
+                   },
+                   direction: "N"
+                 }
+               },
+               %Rover{
+                 id: "2",
+                 position: %Position{
+                   coordinate: %Coordinate{
+                     x: 1,
+                     y: 2
+                   },
+                   direction: "N"
+                 }
+               }
+             ]
+           }
+
+  end
 end

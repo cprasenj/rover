@@ -2,20 +2,28 @@ defmodule Plateau do
 
   defstruct x: nil, y: nil, rovers: []
 
-  defp verifyRover(plateau, rover) do
+  defp verifyRover(rover, plateau) do
     cond do
-      isPositionEmpty(plateau, rover.position.coordinate) -> rover
+      isPositionEmpty(%Plateau{plateau | rovers: plateau.rovers }, rover.position.coordinate) -> rover
       :else -> raise "collision"
     end
   end
 
   def command_rover(plateau, rover_id, commands) do
-    roverToBeCommand = Enum.find(plateau.rovers, fn r -> r == rover_id end)
+    roverToBeCommand = Enum.find(plateau.rovers, fn r -> r.id == rover_id end)
     updatedRover = Enum.reduce(
       commands,
       roverToBeCommand,
       fn (c, r) ->
-        Rover.update(r, [c])
+        Rover.update(
+          r,
+          [
+            case c do
+              "M" -> 1
+              _ -> c
+            end
+          ]
+        )
         |> fn (p, r) -> verifyRover(p, r) end.(plateau)
       end
     )
